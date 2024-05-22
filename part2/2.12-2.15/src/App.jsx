@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import personService from './services/person'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -10,20 +11,52 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
+  const deletePerson = (id, name) => {
+    if (!confirm(`Delete ${name} ?`)) return
+    const changedPersons = persons.filter(n => n.id !== id)
+    personService.remove(id)
+      .then(() => {
+        setPersons(changedPersons)
+      })
+  }
+
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+  }, [])
+
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = { 
       name: newName,
       number: newNumber,
-      id: persons.length + 1
     }
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+
+    const matchedPerson = persons.find(person => person.name === newName)
+
+    if (matchedPerson === undefined) { //new person
+      personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
       return
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+
+    if (!confirm(`${newName} is already added to phonebook, replace old number with new one?`)) return
+    
+    //replace old name with new
+    const id = matchedPerson.id
+    personService
+      .update(id, personObject)
+      .then(returnedPerson => {
+        setPersons(persons.map(p => p.id !== id ? p : returnedPerson))
+      })
   }
 
   const handlePersonChange = (event) => {
@@ -55,7 +88,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson}/>
     </div>
   )
 }
