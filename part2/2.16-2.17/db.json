@@ -1,44 +1,24 @@
 {
-  "persons": [
-    {
-      "name": "Arto Hellas",
+  "persons":[
+    { 
+      "name": "Arto Hellas", 
       "number": "040-123456",
-      "id": "1"
+      "id": 1
     },
-    {
-      "name": "Dan Abramov",
+    { 
+      "name": "Ada Lovelace", 
+      "number": "39-44-5323523",
+      "id": 2
+    },
+    { 
+      "name": "Dan Abramov", 
       "number": "12-43-234345",
-      "id": "3"
+      "id": 3
     },
-    {
-      "name": "Mary Poppendieck",
+    { 
+      "name": "Mary Poppendieck", 
       "number": "39-23-6423122",
-      "id": "4"
-    },
-    {
-      "id": "954b",
-      "name": "asd",
-      "number": "2"
-    },
-    {
-      "id": "c640",
-      "name": "sad",
-      "number": "2"
-    },
-    {
-      "id": "7cd6",
-      "name": "hiiii",
-      "number": "454521"
-    },
-    {
-      "id": "eeb1",
-      "name": "sasdsad",
-      "number": "2"
-    },
-    {
-      "name": "ds",
-      "number": "66",
-      "id": "4669"
+      "id": 4
     }
   ]
 }
