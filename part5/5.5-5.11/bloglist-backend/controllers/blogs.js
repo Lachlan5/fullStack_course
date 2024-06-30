@@ -46,6 +46,18 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
+
+    const blog = await Blog.find({_id: request.params.id}).populate('user')
+    const blogAuthorId = blog[0].user[0]._id.toString()
+    if (user.id != blogAuthorId) {
+        return response.status(401).json({ error: 'unauthorized blog user' })
+    }
+
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
 })
@@ -60,8 +72,20 @@ blogsRouter.put('/:id', async (request, response) => {
 
     const body = request.body
 
+    if (!body.user 
+        || !body.likes
+        || !body.author
+        || !body.title
+        || !body.url
+    ) {
+        response.status(400).send({ error: 'malformatted id' })
+        return
+    }
+
+    const id = request.params.id
+
     const blog = {
-        _id: body._id,
+        _id: id,
         title: body.title,
         author: body.author,
         url: body.url,
