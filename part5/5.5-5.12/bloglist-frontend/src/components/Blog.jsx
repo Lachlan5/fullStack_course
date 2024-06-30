@@ -1,4 +1,4 @@
-import Togglable from "./Togglable"
+import Togglable from './Togglable'
 
 const Blog = ({ blog, handleLike, handleRemove }) => {
   const blogStyle = {
@@ -8,7 +8,7 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+
   const like = () => {
     const newBlogObject = {
       ...blog,
@@ -34,7 +34,7 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
       </Togglable>
     </div>
   )
-    
+
 }
 
 export default Blog
